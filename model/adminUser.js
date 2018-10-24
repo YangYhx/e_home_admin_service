@@ -5,12 +5,18 @@ const Schema = mongoose.Schema
 let adminUser = new Schema({
     username:{
         type:String,
-        required:true
+        required:true,
+        unique:true  //唯一
     },
     password:String,
     avatar:String,
     desc:String,
     sex:Number,
+    nickname:{
+        type:String,
+        required:true,
+        unique:true
+    },
 
 },{versionKey:false,timestamps:{createdAt:'create_time',updatedAt:'update_time'}})
 

@@ -15,7 +15,7 @@ app.use(session({
     secret: 'cat',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }, //安全，如果是true 对应的是https
+    cookie: { secure: false,maxAge:1000*60*60*2 }, //安全，如果是true 对应的是https
     store:new MongoStore({ mongooseConnection: mongmodelContion })
 }))
 

@@ -1,16 +1,18 @@
 const {Router} = require('express')
 const adminUserModel = require('../model/adminUser')
+const auth = require('./auth')  //验证
 
 const router = Router()
 
-router.post('/', async (req,res,next) => {   //添加模块
+router.post('/',auth, async (req,res,next) => {   //添加模块
     try {
         let {
             username,
             password,
             avatar,
             desc,
-            sex
+            sex,
+            nickname
         } = req.body
 
         const data = await adminUserModel.create({
@@ -18,7 +20,8 @@ router.post('/', async (req,res,next) => {   //添加模块
             password,
             avatar,
             desc,
-            sex
+            sex,
+            nickname
         })
         res.json({
             code:200,
@@ -61,5 +64,25 @@ router.post('/login',async (req,res,next)=> {
     }
 
 
+})
+router.get('/userlist',async (req,res,next) => {
+    try {
+        let{ page = 1,page_size = 10} = req.params
+        page = parseInt(page)
+        page_size = parseInt(page_size)
+        const data = await  adminUserModel.find()
+            .skip((page-1)*page_size)
+            .limit(page_size)
+            .sort({id:-1})
+            .select("-password")
+
+        res.json({
+            code: 200,
+            data,
+            msg:'成功'
+        })
+    }catch (err) {
+        next(err)
+    }
 })
 module.exports = router
