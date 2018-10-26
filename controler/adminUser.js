@@ -67,7 +67,7 @@ router.post('/login',async (req,res,next)=> {
 })
 router.get('/userlist',async (req,res,next) => {
     try {
-        let{ page = 1,page_size = 10} = req.params
+        let{ page = 1,page_size = 10} = req.query
         page = parseInt(page)
         page_size = parseInt(page_size)
         const data = await  adminUserModel.find()
@@ -80,6 +80,20 @@ router.get('/userlist',async (req,res,next) => {
             code: 200,
             data,
             msg:'成功'
+        })
+    }catch (err) {
+        next(err)
+    }
+})
+router.post('/logout',async (req,res,next) => {
+    try {
+        if(req.session.user){
+            console.log(1)
+            req.session.user = null
+        }
+        res.json({
+            code:200,
+            msg:'退出登录成功'
         })
     }catch (err) {
         next(err)
